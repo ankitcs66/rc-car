@@ -1,0 +1,45 @@
+#include <VirtualWire.h>
+char *controller;
+void setup() {
+pinMode(13,OUTPUT);
+vw_set_ptt_inverted(true); //
+vw_set_tx_pin(12);
+vw_setup(4000);// speed of data transfer Kbps
+pinMode(7,INPUT);
+pinMode(6,INPUT);
+pinMode(5,INPUT);
+pinMode(4,INPUT);
+Serial.begin(9600);
+}
+
+void loop(){
+controller="FFFF" ;
+check();
+vw_send((uint8_t *)controller, strlen(controller));
+vw_wait_tx(); // Wait until the whole message is gone
+delay(100);
+}
+void check()
+{
+  if(digitalRead(7)==HIGH)
+  { controller[3]='O';
+   Serial.println("7high");
+  }
+if(digitalRead(7)==LOW){
+   controller[3]='F';Serial.println("7low");}
+   
+if(digitalRead(6)==HIGH){
+   controller[2]='O';Serial.println("6high");}
+if(digitalRead(6)==LOW){
+   controller[2]='F';Serial.println("6low");}
+   
+if(digitalRead(5)==HIGH){
+   controller[1]='O';Serial.println("5high");}
+if(digitalRead(5)==LOW){
+   controller[1]='F';Serial.println("5low");}
+
+if(digitalRead(4)==HIGH){
+   controller[0]='O';Serial.println("4high");}
+if(digitalRead(4)==LOW){
+   controller[0]='F';Serial.println("4low");}
+}
